@@ -11,13 +11,12 @@ def load_env():
 async def browser_context():
     load_dotenv()
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=True)
+        browser = await p.chromium.launch(headless=False)
         context = await browser.new_context()
         base_url = 'https://github.com/login'
         page = await context.new_page()
         await page.goto(base_url)
 
-        # Логинимся и сохраняем cookies
         login = os.getenv('LOGIN')
         password = os.getenv('PASSWORD')
 
@@ -26,20 +25,20 @@ async def browser_context():
 
         await page.fill("#login_field", login)
         await page.fill("#password", password)
-        await page.get_by_role("button", name="Sign in").click()
+        await page.locator('input[value="Sign in"]').click()
         await page.wait_for_timeout(2000)
         cookies = await context.cookies()
 
         await browser.close()
         return cookies
 
-# Фикстура для браузера с cookies
 @pytest_asyncio.fixture(scope="function")
 async def browser_with_cookies(browser_context):
     """Открывает браузер с сохраненными cookies"""
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False)
-        context = await browser.new_context()
+        context = await browser.new_context(
+            viewport={"width": 1920, "height": 1080})
         await context.add_cookies(browser_context)
         page = await context.new_page()
         try:

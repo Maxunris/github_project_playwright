@@ -26,7 +26,7 @@ async def test_create_repo(browser_with_cookies):
     except Exception as e:
         os.makedirs("screenshots", exist_ok=True)
         await page.screenshot(path="screenshots/test_create_repo_error.png")
-        print(f"Error in test_create_repo: {e}")
+        print(f"Ошибка в test_create_repo: {e}")
         raise
 
 @pytest.mark.asyncio
@@ -46,5 +46,5 @@ async def test_delete_repo(browser_with_cookies):
     except Exception as e:
         os.makedirs("screenshots", exist_ok=True)
         await page.screenshot(path="screenshots/test_delete_repo_error.png")
-        print(f"Error in test_delete_repo: {e}")
+        print(f"Ошибка в test_delete_repo: {e}")
         raise

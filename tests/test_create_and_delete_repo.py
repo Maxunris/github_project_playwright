@@ -1,27 +1,26 @@
 import os
 import time
-
 import pytest
 from playwright.async_api import expect
+from pages.create_repo_page import CreateRepoPage
+from pages.main_page_repo import MainPageRepo
+from pages.delete_repo_page import DeleteRepoPage
+from pages.profile_page import ProfilePage
 
 @pytest.mark.asyncio
 async def test_create_repo(browser_with_cookies):
     page = browser_with_cookies
+    create_repo_page = CreateRepoPage(page)
+    main_page_repo = MainPageRepo(page)
+
     try:
         await page.goto("https://github.com/new")
-        await page.get_by_test_id("repository-name-input").fill("testnewrepo")
-        await page.get_by_label("Description").fill("testdescription")
-        await page.get_by_label("Add a README file").check()
-        await page.get_by_role("button", name=".gitignore template: None").click()
-        await page.get_by_placeholder("Filter…").fill("py")
-        await page.get_by_text("Python").click()
-        time.sleep(3)
-        await page.get_by_text("Create repository").click()
-
-        await expect(page.locator("#repo-title-component")).to_contain_text("testnewrepo")
-        await expect(page.locator("#folder-row-0")).to_contain_text(".gitignore")
-        await expect(page.locator("#folder-row-1")).to_contain_text("README.md")
-        await expect(page.get_by_role("article")).to_contain_text("testdescription")
+        await create_repo_page.fill_repository_details("testnewrepo", "testdescription")
+        await create_repo_page.add_readme()
+        await create_repo_page.select_gitignore_template("Python")
+        time.sleep(1)
+        await create_repo_page.create_repository()
+        await main_page_repo.verify_repository_created("testnewrepo", "testdescription")
 
     except Exception as e:
         os.makedirs("screenshots", exist_ok=True)
@@ -32,16 +31,17 @@ async def test_create_repo(browser_with_cookies):
 @pytest.mark.asyncio
 async def test_delete_repo(browser_with_cookies):
     page = browser_with_cookies
-    try:
-        await page.goto("https://github.com/maxtest2451/testnewrepo/settings")
-        await page.get_by_role("button", name="Delete this repository").click()
-        await page.get_by_label("Effects of deleting this").get_by_text("maxtest2451/testnewrepo").click()
-        await page.get_by_role("button", name="I want to delete this").click()
-        await page.get_by_role("button", name="I have read and understand").click()
-        await page.get_by_label("To confirm, type \"maxtest2451").fill("maxtest2451/testnewrepo")
-        await page.get_by_label("Delete maxtest2451/testnewrepo").get_by_role("button", name="Delete this repository").click()
+    delete_repo_page = DeleteRepoPage(page)
+    profile_page = ProfilePage(page)
+    repo_url = "https://github.com/maxtest2451/testnewrepo"
 
-        await expect(page.locator("#user-repositories-list")).to_contain_text("maxtest2451 doesn’t have any public repositories yet.")
+    try:
+        await page.goto(f"{repo_url}/settings")
+        await delete_repo_page.delete_repository("maxtest2451/testnewrepo")
+
+        # Assertions
+        await page.goto("https://github.com/maxtest2451?tab=repositories")
+        await profile_page.verify_no_public_repositories()
 
     except Exception as e:
         os.makedirs("screenshots", exist_ok=True)

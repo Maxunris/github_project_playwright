@@ -4,12 +4,10 @@ from dotenv import load_dotenv
 from playwright.async_api import async_playwright
 import os
 
-# Загрузка переменных окружения
 @pytest_asyncio.fixture(scope="function", autouse=True)
 def load_env():
     load_dotenv()
 
-# Фикстура для создания браузерного контекста и сохранения cookies
 @pytest_asyncio.fixture(scope="session")
 async def browser_context():
     load_dotenv()
@@ -35,7 +33,6 @@ async def browser_context():
         await browser.close()
         return cookies
 
-# Фикстура для открытия браузера с сохраненными cookies
 @pytest_asyncio.fixture(scope="function")
 async def browser_with_cookies(browser_context):
     """Открывает браузер с сохраненными cookies"""

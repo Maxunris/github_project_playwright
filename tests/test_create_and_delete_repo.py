@@ -24,7 +24,6 @@ async def test_create_repo(browser_with_cookies):
         await expect(page.get_by_role("article")).to_contain_text("testdescription")
 
     except Exception as e:
-        # Сохранение скриншота в случае ошибки
         os.makedirs("screenshots", exist_ok=True)
         await page.screenshot(path="screenshots/test_create_repo_error.png")
         print(f"Error in test_create_repo: {e}")
@@ -45,7 +44,6 @@ async def test_delete_repo(browser_with_cookies):
         await expect(page.locator("#user-repositories-list")).to_contain_text("maxtest2451 doesn’t have any public repositories yet.")
 
     except Exception as e:
-        # Сохранение скриншота в случае ошибки
         os.makedirs("screenshots", exist_ok=True)
         await page.screenshot(path="screenshots/test_delete_repo_error.png")
         print(f"Error in test_delete_repo: {e}")

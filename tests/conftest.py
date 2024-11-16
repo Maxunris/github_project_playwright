@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from playwright.async_api import async_playwright
 import os
 
+
 @pytest_asyncio.fixture(scope="function", autouse=True)
 def load_env():
     load_dotenv()

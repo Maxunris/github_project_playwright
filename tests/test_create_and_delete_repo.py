@@ -1,18 +1,21 @@
 import os
 import time
 import pytest
+import allure
 from pages.create_repo_page import CreateRepoPage
 from pages.main_page_repo import MainPageRepo
 from pages.delete_repo_page import DeleteRepoPage
 from pages.profile_page import ProfilePage
 @pytest.mark.positive
 @pytest.mark.asyncio
+@allure.title("Создание репозитория")
 async def test_create_repo(browser_with_cookies):
     page = browser_with_cookies
     create_repo_page = CreateRepoPage(page)
     main_page_repo = MainPageRepo(page)
 
     try:
+
         await page.goto("https://github.com/new")
         await create_repo_page.fill_repository_details("testnewrepo", "testdescription")
         await create_repo_page.add_readme()
@@ -28,6 +31,8 @@ async def test_create_repo(browser_with_cookies):
         raise
 @pytest.mark.positive
 @pytest.mark.asyncio
+@allure.title("Удаление репозитория")
+
 async def test_delete_repo(browser_with_cookies):
     page = browser_with_cookies
     delete_repo_page = DeleteRepoPage(page)

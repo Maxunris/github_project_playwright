@@ -1,5 +1,6 @@
 import pytest
 from pages.login_page import LoginPage
+import allure
 
 TEST_DATA = [
     ("Max1@gmail.com", "Allods123", "Incorrect username or password."),
@@ -10,6 +11,8 @@ TEST_DATA = [
 @pytest.mark.negative
 @pytest.mark.parametrize("username,password,expected_error", TEST_DATA)
 @pytest.mark.asyncio
+@allure.title("Вход с некорректными данными")
+
 async def test_negative_login(browser_without_cookies, username, password, expected_error):
     page = browser_without_cookies
     login_page = LoginPage(page)

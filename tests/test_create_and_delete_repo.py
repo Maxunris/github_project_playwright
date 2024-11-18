@@ -1,7 +1,6 @@
 import os
 import time
 import pytest
-from playwright.async_api import expect
 from pages.create_repo_page import CreateRepoPage
 from pages.main_page_repo import MainPageRepo
 from pages.delete_repo_page import DeleteRepoPage

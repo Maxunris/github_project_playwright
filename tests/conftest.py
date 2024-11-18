@@ -18,7 +18,6 @@ async def browser_context():
         context = await browser.new_context()
         page = await context.new_page()
 
-        # Используем Page Object Model
         login_page = LoginPage(page)
         await login_page.goto()
 
@@ -31,7 +30,6 @@ async def browser_context():
         await login_page.login(login, password)
         await page.wait_for_timeout(2000)
 
-        # Проверяем успешный вход
         if not await login_page.is_logged_in():
             raise ValueError("Не удалось выполнить вход в систему")
 

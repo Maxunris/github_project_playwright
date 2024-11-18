@@ -7,7 +7,7 @@ TEST_DATA = [
     ("Max3@gmail.com", "Allods125125", "Incorrect username or password."),
     ("Max4@gmail.com", "Allods11221123", "Incorrect username or password.")
 ]
-
+@pytest.mark.negative
 @pytest.mark.parametrize("username,password,expected_error", TEST_DATA)
 @pytest.mark.asyncio
 async def test_negative_login(browser_without_cookies, username, password, expected_error):

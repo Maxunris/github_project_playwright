@@ -5,7 +5,7 @@ from pages.create_repo_page import CreateRepoPage
 from pages.main_page_repo import MainPageRepo
 from pages.delete_repo_page import DeleteRepoPage
 from pages.profile_page import ProfilePage
-
+@pytest.mark.positive
 @pytest.mark.asyncio
 async def test_create_repo(browser_with_cookies):
     page = browser_with_cookies
@@ -26,7 +26,7 @@ async def test_create_repo(browser_with_cookies):
         await page.screenshot(path="screenshots/test_create_repo_error.png")
         print(f"Ошибка в test_create_repo: {e}")
         raise
-
+@pytest.mark.positive
 @pytest.mark.asyncio
 async def test_delete_repo(browser_with_cookies):
     page = browser_with_cookies
